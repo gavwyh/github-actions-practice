@@ -1,0 +1,28 @@
+name: on-push-workflow
+on: push
+jobs:
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+        - name: Get code
+          uses: actions/checkout@v3
+        - name: Lint code
+          uses: npm lint
+    test:
+        needs: lint
+        runs-on: ubuntu-latest
+        steps:
+        - name: Get code
+          uses: actions/checkout@v3
+        - name: Test code
+          uses: npm test
+    deploy:
+        needs: [lint, test]
+        runs-on: ubuntu-latest
+        steps:
+        - name: Get code
+          uses: actions/checkout@v3
+        - name: Build code
+          uses: npm build
+        - name: Deploy code
+          run: echo "deploying"
